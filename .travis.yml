@@ -1,0 +1,25 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t pitbull959/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run pitbull959/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t pitbull959/multi-client ./client
+  - docker build -t pitbull959/multi-nginx  ./nginx
+  - docker build -t pitbull959/multi-server ./server
+  - docker build -t pitbull959/multi-worker ./worker
+  # Login in to docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID"  --password-stdin
+  # Push to docker hub
+  - docker push  pitbull959/multi-client
+  - docker push  pitbull959/multi-nginx
+  - docker push  pitbull959/multi-server
+  - docker push  pitbull959/multi-worker
+
+
+
