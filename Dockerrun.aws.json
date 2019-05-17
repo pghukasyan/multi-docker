@@ -5,22 +5,19 @@
             "name": "client",
             "image": "pitbull959/multi-client",
             "hostname": "client",
-            "essential": false,
-            "memory": 128
+            "essential": false
         },
         {
             "name": "server",
             "image": "pitbull959/multi-server",
             "hostname": "api",
-            "essential": false,
-            "memory": 64
+            "essential": false
         },
         {
             "name": "worker",
             "image": "pitbull959/multi-worker",
             "hostname": "worker",
-            "essential": false,
-            "memory": 64
+            "essential": false
         },
         {
             "name" :"nginx",
@@ -33,9 +30,8 @@
                     "containerPort" : 80
                 }
             ],
-            "links": ["client", "server"],
-            "memory": 64
-            
+            "links": ["client", "server"]
+
         }
 
     ]
