@@ -6,7 +6,7 @@
             "image": "pitbull959/multi-client",
             "hostname": "client",
             "essential": false,
-            "memory": 128
+            "memory": 192
         },
         {
             "name": "server",
