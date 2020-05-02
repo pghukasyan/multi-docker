@@ -1,31 +1,31 @@
 version: '3'
 services:
-  proxy:
-    # restart: always
+  postgres:
+    image: 'postgres:latest'
+  redis:
+    image: 'redis:latest'
+  nginx:
+    restart: always
     build:
       dockerfile: Dockerfile.dev
       context: ./nginx
     ports:
       - '3050:80'
-  postgres:
-    image: 'postgres:10-alpine'
-  redis:
-    image: 'redis:latest'
   api:
     build:
       dockerfile: Dockerfile.dev
       context: ./server
-    volumes: 
+    volumes:
       - /app/node_modules
       - ./server:/app
     environment:
       - REDIS_HOST=redis
-      - REDIS_POPRT=6379
-      - PGHOST=postgres
-      - PGPORT=5432
+      - REDIS_PORT=6379
       - PGUSER=postgres
-      - PGPASSWORD=postgres_password
+      - PGHOST=postgres
       - PGDATABASE=postgres
+      - PGPASSWORD=postgres_password
+      - PGPORT=5432
   client:
     build:
       dockerfile: Dockerfile.dev
@@ -34,12 +34,12 @@ services:
       - /app/node_modules
       - ./client:/app
   worker:
-    build: 
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    build:
       dockerfile: Dockerfile.dev
       context: ./worker
     volumes:
       - /app/node_modules
       - ./worker:/app
-    environment:
-      - REDIS_HOST=redis
-      - REDIS_POPRT=6379      
